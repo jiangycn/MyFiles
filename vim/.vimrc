@@ -64,6 +64,12 @@ set directory=/Users/jiangye/Documents/temp
 "设置代码折叠
 set foldmethod=manual
 
+" our <leader> will be the space key
+let mapleader=" "
+
+" our <localleader> will be the '-' key
+let maplocalleader="-"
+
 
 "-------------------------------------------------------------------------------
 "文本操作设置
@@ -115,6 +121,10 @@ vnoremap p <Esc>:let current_reg = @"<CR>gvs<C-R>=current_reg<CR><Esc>
 
 "对齐线背景色
 :hi colorcolumn guibg=Dimgray
+
+" Split fast
+nnoremap <leader>\ :vs<CR>
+nnoremap <leader>- :sp<CR>
 
 "<Leader>t 输入当前时间
 imap <silent><leader>p <c-r>=strftime('%c')<cr>
@@ -269,8 +279,16 @@ let g:ctrlp_cmd = 'CtrlPMixed'
 Plugin 'Valloric/YouCompleteMe'
 set completeopt=longest,menu	"让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
 
-
-
+"代码搜索
+Plugin 'mileszs/ack.vim'
+"如果有ag，使用ag进行搜索
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+"默认不跳转到第一条
+cnoreabbrev Ack Ack!
+"映射快捷命令
+nnoremap <Leader>a :Ack!<Space>
 
 
 " 代码格式化
