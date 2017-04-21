@@ -281,7 +281,7 @@ set completeopt=longest,menu	"让Vim的补全菜单行为与一般IDE一致(参�
 
 "代码搜索
 Plugin 'mileszs/ack.vim'
-"如果有ag，使用ag进行搜索
+"如果有ag，使用ag进行搜索,需要先安装the_silver_searcher：brew install the_silver_searcher
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
