@@ -5,6 +5,21 @@
 "-------------------------------------------------------------------------------
 set nocompatible                                                    "启用Vim的特性，而不是Vi的（必须放到配置的最前边）
 
+"nvim相关基本配置---begin
+" 开启 NVIM 专用选项
+if has('nvim')
+  " 允许真彩显示
+  "let $NVIM_TUI_ENABLE_TRUE_COLOR = 0
+  "set termguicolors
+  " 允许光标变化,insert时变成|,normal时为方块
+  let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+endif
+
+" 插入模式自动补全标签显示更多信息
+set showfulltag
+"nvim相关基本配置---end
+
+
 set encoding=utf-8                                                  " 设置编码
 set fenc=utf-8
 set fileencodings=ucs-bom,utf-8,cp936,gb2312,gb18030,big5
@@ -120,7 +135,9 @@ inoremap <C-U> <C-G>u<C-U>
 vnoremap p <Esc>:let current_reg = @"<CR>gvs<C-R>=current_reg<CR><Esc>
 
 "对齐线背景色
-:hi colorcolumn guibg=Dimgray
+":hi colorcolumn guibg=Dimgray
+:hi colorcolumn ctermbg=DarkGreen guibg=DarkGreen
+
 
 " Split fast
 nnoremap <leader>\ :vs<CR>
@@ -242,45 +259,39 @@ endif
 "-------------------------------------------------------------------------------
 "插件设置
 "-------------------------------------------------------------------------------
-"Vundle 的配置
+"plug的配置
 filetype off                   " required!
 set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/autoload/
+if empty(glob('$HOME/.vim/autoload/plug.vim'))
+  silent !curl -fLo $HOME/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd! VimEnter * PlugInstall | source $MYVIMRC
+endif
 
-" let Vundle manage Vundle
-" required! 
-"管理Vim插件 
-Bundle 'gmarik/vundle'
+call plug#begin('$HOME/.vim/bundle')
 
-" My Bundles here:
-"这里是设置你自己自定义的插件的设置vundle设置
-"注意：下载的插件git为：
-"https://github.com/godlygeek/tabular.git，
-"则设置为
-"Bundle 'godlygeek/tabular';
-"https://github.com/gmarik/vundle.git
-"设置则为
-"Bundle 'gmarik/vundle'
+
 
 "文本按字符对齐,  如选中需要对齐的代码，然后输入 :Tab/=  可以让代码在=两边对齐
-Bundle 'godlygeek/tabular'
+Plug 'godlygeek/tabular'
 
 "同样也可以看buffers，这样同时可以取代'jlanzarotta/bufexplorer' 
 "热键C-p 呼出
 "呼出后C-b,C-f 切换模式
 " https://github.com/kien/ctrlp.vim
-Plugin 'kien/ctrlp.vim'
+Plug 'kien/ctrlp.vim'
 " 默认使用混合模式
 let g:ctrlp_cmd = 'CtrlPMixed'
 
 
 " ------------------------------------------------------------
 " 智能补全
-Plugin 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe'
 set completeopt=longest,menu	"让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
 
 "代码搜索
-Plugin 'mileszs/ack.vim'
+Plug 'mileszs/ack.vim'
 "如果有ag，使用ag进行搜索,需要先安装the_silver_searcher：brew install the_silver_searcher
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
@@ -293,23 +304,23 @@ nnoremap <Leader>a :Ack!<Space>
 
 " 代码格式化
 " 热键 F3
-Plugin 'Chiel92/vim-autoformat'
+Plug 'Chiel92/vim-autoformat'
 "格式化时处理行尾空格
 let g:autoformat_remove_trailing_spaces = 0
 noremap <F3> :Autoformat<CR><CR>
 
 "tags相关插件，ctags生成tag，taglist列出tag
-Bundle 'ctags.vim'
-Bundle 'taglist.vim'
+Plug 'ctags.vim'
+Plug 'taglist.vim'
 nmap <F7> :Tlist<CR>
 " tags 管理
 " 热键 F8
-Plugin 'majutsushi/tagbar'
+Plug 'majutsushi/tagbar'
 nmap <F8> :TagbarToggle<CR>
 set tags=./tags,tags;/
 
 " 语法检测
-Plugin 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic'
 let g:syntastic_rst_checkers = ['rstcheck']
 let g:syntastic_html_tidy_ignore_errors = [
       \"trimming empty",
@@ -327,13 +338,13 @@ let g:syntastic_html_tidy_ignore_errors = [
 
 
 "窗口管理插件   :WMToggle
-Bundle 'winmanager'
+Plug 'winmanager'
 noremap <F10> :WMToggle<CR><CR>
 "注释  gcc
-Plugin 'tomtom/tcomment_vim'
+Plug 'tomtom/tcomment_vim'
 
 "状态栏增强插件  ok
-Bundle 'Lokaltog/vim-powerline'
+Plug 'Lokaltog/vim-powerline'
 let g:Powerline_stl_path_style = 'full'
 "如果要使用fancy , 需要先添加字体 -> git clone git://gist.github.com/1630581.git ~/.fonts/ttf-dejavu-powerline
 "let g:Powerline_symbols = 'fancy'
@@ -341,31 +352,31 @@ let g:Powerline_stl_path_style = 'full'
 "Plugin 'bling/vim-airline'
 
 " Git，Git 管理
-Plugin 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 
 "匹配成对的括号，键入% 后可跳转到对应的括号
-Bundle 'matchit.zip'
+Plug 'matchit.zip'
 "matchit 的字符匹配自定义设置
 let b:match_words = '\<if\>:\<endif\>,'
     \ . '\<while\>:\<continue\>:\<break\>:\<endwhile\>'
 
 "语法高亮
-Plugin 'othree/html5.vim'
-Bundle 'python-syntax'
+Plug 'othree/html5.vim'
+Plug 'python-syntax'
 let python_highlight_all = 1
 " Plugin 'JavaScript-syntax'
 
 " JSON 高亮
-Plugin 'elzr/vim-json'
+Plug 'elzr/vim-json'
 let g:indentLine_noConcealCursor=""
 
 " angularjs
-Plugin 'burnettk/vim-angular'
+Plug 'burnettk/vim-angular'
 
 
 "括号增强  ok 这个插件设置后，后面不能再设syntax enabled这样的语句
 "否则，有可能会使部分括号的彩虹效果消失
-Bundle 'kien/rainbow_parentheses.vim'
+Plug 'kien/rainbow_parentheses.vim'
 syntax enable
 let g:rbpt_colorpairs = [
     \ ['brown',       'RoyalBlue3'],
@@ -393,19 +404,19 @@ au Syntax * RainbowParenthesesLoadSquare            "中括号
 au Syntax * RainbowParenthesesLoadBraces            "大括号
 
 "Sphinx增强插件  ok
-Bundle 'Rykka/riv.vim'
+Plug 'Rykka/riv.vim'
 let g:riv_disable_folding = 1                       "不开启折叠
 let g:riv_fold_auto_update = 0                      "不开启自动折叠
 "Sphinx所见即所得插件
-Plugin 'Rykka/InstantRst'
+Plug 'Rykka/InstantRst'
 let g:instant_rst_slow = 1                          "机子较慢的情况使用
 let g:instant_rst_bind_scroll = 0                   "不绑定滚动，这样不会动一下光标就刷一次
 
 "grep搜索插件
-Plugin 'vim-scripts/EasyGrep'
+Plug 'vim-scripts/EasyGrep'
 
 "目录树插件  ok
-Bundle 'https://github.com/scrooloose/nerdtree.git'
+Plug 'https://github.com/scrooloose/nerdtree.git'
 nmap <F9> :NERDTreeToggle<CR>
 
 "缩进插件    ok
@@ -418,7 +429,7 @@ nmap <F9> :NERDTreeToggle<CR>
 
 "另一种缩进插件
 " https://github.com/Yggdroot/indentLine
-Plugin 'Yggdroot/indentLine'
+Plug 'Yggdroot/indentLine'
 let g:indentLine_char = '|'
 
 "用vim7.3的标尺功能，显示第80列
@@ -443,12 +454,12 @@ endfunction
 "let g:solarized_contrast = "normal"
 "let g:solarized_visibility = "normal""
 "molokai主题
-"Bundle 'tomasr/molokai'
+Plug 'tomasr/molokai'
 "let g:molokai_original = 1
 "moria主题
 "Bundle 'moria'
 
-Plugin 'flazz/vim-colorschemes'
+Plug 'flazz/vim-colorschemes'
 
 " 配色方案
 set background=dark
@@ -465,15 +476,10 @@ if has('gui_running')
     "colorscheme desert
 endif
 
+"vim启动后，直接设置配色方案为molokai
+"autocmd vimenter * :colorscheme molokai
+
+call plug#end()
+
 
 filetype plugin indent on     " required!
-"
-" Brief help
-" :BundleList          - list configured bundles
-" :BundleInstall(!)    - install(update) bundles
-" :BundleUpdate        - update bundles
-" :BundleSearch(!) foo - search(or refresh cache first) for foo
-" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
-"
-" see :h vundle for more details or wiki for FAQ
-" NOTE: comments after Bundle command are not allowed..
