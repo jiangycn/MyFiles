@@ -276,6 +276,11 @@ call plug#begin('$HOME/.vim/bundle')
 "文本按字符对齐,  如选中需要对齐的代码，然后输入 :Tab/=  可以让代码在=两边对齐
 Plug 'godlygeek/tabular'
 
+"markdown语法高亮
+Plug 'plasticboy/vim-markdown'
+"打开markdown文件时自动打开浏览器预览，npm支持
+Plug 'suan/vim-instant-markdown'
+
 "同样也可以看buffers，这样同时可以取代'jlanzarotta/bufexplorer' 
 "热键C-p 呼出
 "呼出后C-b,C-f 切换模式
@@ -355,13 +360,15 @@ Plug 'vim-airline/vim-airline'
 let g:airline_powerline_fonts = 1
 "开启tabline
 let g:airline#extensions#tabline#enabled = 1
+"tabline中buffer显示编号
+let g:airline#extensions#tabline#buffer_nr_show = 1
 "tabline中当前buffer两端的分隔字符
 let g:airline#extensions#tabline#left_sep = ' '
 "tabline中未激活buffer两端的分隔字符
 let g:airline#extensions#tabline#left_alt_sep = '|'
-"tabline中buffer显示编号
-let g:airline#extensions#tabline#buffer_nr_show = 1
 
+"设置consolas字体"前面已经设置过
+"set guifont=Consolas\ for\ Powerline\ FixedD:h11
 
   if !exists('g:airline_symbols')
     let g:airline_symbols = {}
