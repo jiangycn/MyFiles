@@ -13,12 +13,21 @@ if has('nvim')
   "set termguicolors
   " 允许光标变化,insert时变成|,normal时为方块
   let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+
+
+  vmap "+y :w !pbcopy<CR><CR>
+  nmap "+p :r !pbpaste<CR><CR>
+
 endif
 
 " 插入模式自动补全标签显示更多信息
 set showfulltag
 "nvim相关基本配置---end
 
+"将复制内容同步到系统剪贴板
+set clipboard=unnamed
+"p粘贴后不清空剪贴板
+xnoremap p pgvy
 
 set encoding=utf-8                                                  " 设置编码
 set fenc=utf-8
@@ -278,6 +287,7 @@ Plug 'godlygeek/tabular'
 
 "markdown语法高亮
 Plug 'plasticboy/vim-markdown'
+let g:vim_markdown_folding_disabled = 1       "不自动折叠
 "打开markdown文件时自动打开浏览器预览，npm支持
 Plug 'suan/vim-instant-markdown'
 
@@ -298,9 +308,16 @@ set completeopt=longest,menu	"让Vim的补全菜单行为与一般IDE一致(参�
 "代码搜索
 Plug 'mileszs/ack.vim'
 "如果有ag，使用ag进行搜索,需要先安装the_silver_searcher：brew install the_silver_searcher
+"if executable('ag')
+"  let g:ackprg = 'ag --vimgrep'
+"endif
 if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
+  let g:ackprg = 'rg --vimgrep --no-heading -S'
 endif
+" require fugitive plugin
+cnoreabbrev ag Gcd <bar> Ack!
+
+
 "默认不跳转到第一条
 cnoreabbrev Ack Ack!
 "映射快捷命令
@@ -396,6 +413,7 @@ map <leader>6 :b 6<CR>
 map <leader>7 :b 7<CR>
 map <leader>8 :b 8<CR>
 map <leader>9 :b 9<CR>
+map <leader>l :ls<CR>
 
 
 
